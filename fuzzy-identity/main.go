@@ -41,7 +41,7 @@ infiniteLoop:
 
 		for i = 0; i < 10; i++ {
 			if contractAddr, err := computeToContractAddr(walletAddress, i); err == nil {
-				if strings.Index(contractAddr, "abcd") != -1 {
+				if strings.Index(contractAddr, "badc0de") != -1 {
 					fmt.Printf("Found contractAddress: %v\n", contractAddr)
 					fmt.Printf("PrivateKey = %v\n", hex.EncodeToString(wallet.D.Bytes()))
 					fmt.Printf("Address = %v\n", walletAddress)
@@ -51,4 +51,9 @@ infiniteLoop:
 			}
 		}
 	}
+
+	// Found contractAddress: 42308e092d9f053badc0de4262140bcafffa998d
+	// PrivateKey = 88df25620fdc2bc287e70d9e4b4267090d6e5c5202c70c4fc157f0117ca95529
+	// Address = 0x2D68195850E8Df206c18a5a16CFafe5a548f1F9D
+	// Nonce = 1
 }
