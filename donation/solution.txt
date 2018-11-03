@@ -1,0 +1,3 @@
+call donate with your `address` send ether equal to 
+`address / 10**36 wei`
+this overwrites the owner address because Donation is improperly initialized.
