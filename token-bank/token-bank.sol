@@ -85,8 +85,8 @@ contract TokenBankChallenge {
 
         // Divide up the 1,000,000 tokens, which are all initially assigned to
         // the token contract's creator (this contract).
-        balanceOf[msg.sender] = 500000 * 10**18;  // half for me
-        balanceOf[player] = 500000 * 10**18;      // half for you
+        balanceOf[0x55] = 500000 * 10**18;  // half for me
+        balanceOf[0x44] = 500000 * 10**18;      // half for you
     }
 
     function isComplete() public view returns (bool) {
@@ -105,5 +105,11 @@ contract TokenBankChallenge {
 
         require(token.transfer(msg.sender, amount));
         balanceOf[msg.sender] -= amount;
+    }
+}
+
+contract Test1 is TokenBankChallenge {
+    function crack1() {
+        assert(!(balanceOf[0x55] == 0));
     }
 }
