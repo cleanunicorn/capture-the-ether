@@ -3,7 +3,6 @@ package main
 import (
 	"encoding/hex"
 	"fmt"
-	"strings"
 
 	"crypto/ecdsa"
 	"crypto/rand"
@@ -22,12 +21,14 @@ func PrivateKey(key *ecdsa.PrivateKey) string {
 }
 
 func main() {
-	// fmt.Println(crypto.S256())
-
 	for {
 		k, _ := ecdsa.GenerateKey(crypto.S256(), rand.Reader)
-		if strings.ToLower(Address(k)) == "0x6b477781b0e68031109f21887e6b5afeaaeb002b" {
-			fmt.Println(PrivateKey(k))
+
+		pubBytes := crypto.FromECDSAPub(&k.PublicKey)
+
+		if fmt.Sprintf("%x", pubBytes[1:]) == "a96c5530f604e0a359fea09254be691ade6c5de5fb351a66d961f84c0044e1cee3890476d47ca85ace1df513235ce825b409d49cd8ba1f305ca8d580aefb74c4" {
+			fmt.Println("Address: ", Address(k))
+			fmt.Println("Privatekey: ", PrivateKey(k))
 			break
 		}
 	}
