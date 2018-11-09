@@ -106,4 +106,8 @@ contract TokenBankChallenge {
         require(token.transfer(msg.sender, amount));
         balanceOf[msg.sender] -= amount;
     }
+
+    function fail1() {
+        assert(!isComplete());
+    }
 }

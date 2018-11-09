@@ -1,5 +1,7 @@
 pragma solidity ^0.4.21;
 
+pragma solidity ^0.4.21;
+
 interface ITokenReceiver {
     function tokenFallback(address from, uint256 value, bytes data) external;
 }
@@ -105,5 +107,9 @@ contract TokenBankChallenge {
 
         require(token.transfer(msg.sender, amount));
         balanceOf[msg.sender] -= amount;
+    }
+
+    function fail1() {
+        assert(!isComplete());
     }
 }
