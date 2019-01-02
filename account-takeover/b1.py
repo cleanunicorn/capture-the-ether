@@ -62,16 +62,18 @@ import binascii
 
 n = ecdsa.SECP256k1.order
 
-p = int('0xa96c5530f604e0a359fea09254be691ade6c5de5fb351a66d961f84c0044e1cee3890476d47ca85ace1df513235ce825b409d49cd8ba1f305ca8d580aefb74c4', 0)
+r = int('0x69a726edfb4b802cbf267d5fd1dabcea39d3d7b4bf62b9eeaeba387606167166', 0)
 
-r1 = int('0x69a726edfb4b802cbf267d5fd1dabcea39d3d7b4bf62b9eeaeba387606167166', 0)
+r1 = r
 s1 = int('0x7724cedeb923f374bef4e05c97426a918123cc4fec7b07903839f12517e1b3c8', 0)
 z1 = int('0xd79fc80e7b787802602f3317b7fe67765c14a7d40c3e0dcb266e63657f881396', 0)
+# z1 = int('0x350f3ee8007d817fbd7349c477507f923c4682b3e69bd1df5fbb93b39beb1e04', 0)
 
 
-r2 = int('0x69a726edfb4b802cbf267d5fd1dabcea39d3d7b4bf62b9eeaeba387606167166', 0)
+r2 = r
 s2 = int('0x2bbd9c2a6285c2b43e728b17bda36a81653dd5f4612a2e0aefdb48043c5108de', 0)
 z2 = int('0x061bf0b4b5fdb64ac475795e9bc5a3978f985919ce6747ce2cfbbcaccaf51009', 0)
+# z2 = int('0x4f6a8370a435a27724bbc163419042d71b6dcbeb61c060cc6816cda93f57860c', 0)
 
 if r1 == r2:
     print("Vulnerable")
@@ -91,13 +93,16 @@ s_options = [
 
 for z in z_options: 
     for s in s_options:
-        r_inv = inverse_mod(r1, n)
+        r_inv = inverse_mod(r, n)
         s_inv = inverse_mod(s, n)
         k = (z * s_inv) % n
 
-        pk1 = ((s1 * k) % n - z1) * inverse_mod(r1, n) % n
-        pk2 = ((s2 * k) % n - z2) * inverse_mod(r2, n) % n
+        pk1 = (s1 * k - z1) * inverse_mod(r1, n) % n
+        pk2 = (s2 * k - z2) * inverse_mod(r2, n) % n
+
+        if (pk1 != pk2):
+            continue
 
         addr = ethereum.utils.privtoaddr(pk1)
-        print("addr = {}".format(binascii.hexlify(addr)))
+        print("pk {} = addr 0x{}".format(hex(pk1), addr.hex()))
 
