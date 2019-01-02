@@ -1,6 +1,5 @@
 pragma solidity ^0.4.21;
 
-pragma solidity ^0.4.21;
 
 interface ITokenReceiver {
     function tokenFallback(address from, uint256 value, bytes data) external;
@@ -82,7 +81,7 @@ contract TokenBankChallenge {
     SimpleERC223Token public token;
     mapping(address => uint256) public balanceOf;
 
-    function TokenBankChallenge(address player) public {
+    constructor(address player) public {
         token = new SimpleERC223Token();
 
         // Divide up the 1,000,000 tokens, which are all initially assigned to
@@ -108,8 +107,7 @@ contract TokenBankChallenge {
         require(token.transfer(msg.sender, amount));
         balanceOf[msg.sender] -= amount;
     }
+}
 
-    function fail1() {
-        assert(!isComplete());
-    }
+contract Test1 is TokenBankChallenge {
 }
